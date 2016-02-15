@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Маршруты выездов по области</title>
+<link rel="stylesheet" href="yandex-map-polyline-route.css">
+</head>
+
+<body>
+
+    <div id="controls">
+        <h3>Маршруты выездов по области</h3>
+        <p>Создавайте маршрут, нажимая на точки, через которые осуществлялся проезд.</p>
+        <p>Если маршрут в обе стороны проходил по одним и тем же точкам, выделите маршрут в одну сторону и нажмите флажок "маршрут туда и обратно".</p>
+        <label for="routePrice">Стоимость километра: <input id="routePrice" type="number" value="5.4" disabled> руб.</label>
+        <br>
+        <p>Точки маршрута:
+            <ul id="routePoints">
+            </ul>
+        </p>
+        <p><label for="routeThereAndBack"><input id="routeThereAndBack" type="checkbox"> маршрут туда и обратно</label></p>
+        <div id="routeInfo">Маршрут ещё не построен...</div>
+        <br>
+        <button id="clearRoute">Очистить маршрут</button>
+    </div>
+
+    <div id="map"></div>
+
+<script src="http://api-maps.yandex.ru/2.1/?lang=ru-RU"></script>
+<script src="yandex-map-polyline-route-coordinates.js"></script>
+<script src="yandex-map-polyline-route.js"></script>
+
+</body>
+
+</html>

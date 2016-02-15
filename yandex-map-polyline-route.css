@@ -1,0 +1,47 @@
+html, body, #map, #controls {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+h3 {
+    font-size: 16px;
+}
+#map {
+    width: 80%;
+}
+#controls {
+    overflow: auto;
+    padding: 0.25rem;
+    width: 20%;
+}
+#routePoints {
+    list-style-type: circle;
+    padding-left: 1.5rem;
+}
+#routePrice {
+    width: 3rem;
+}
+#routeThereAndBack {
+    vertical-align: middle;
+}
+#clearRoute {
+    border: none;
+    border-radius: 0.2rem;
+    box-shadow: -1px -1px 0 #961C1C inset;
+    background: #ED2D2D;
+    color: #FFF;
+    font-weight: bold;
+    text-shadow: 1px 1px 0 #961C1C;
+    text-transform: uppercase;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 0;
+    width: 14.5rem;
+}
+
