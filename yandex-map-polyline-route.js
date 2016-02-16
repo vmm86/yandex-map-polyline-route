@@ -165,6 +165,8 @@ function init() {
         // Сброс длины маршрута
         var routeInfo = document.getElementById('routeInfo');
         routeInfo.innerHTML = 'Маршрут ещё не построен...';
+        // Сброс флажка "маршрут туда и обратно"
+        document.getElementById('routeThereAndBack').checked = false;
     }
 
     // СЛУЖЕБНАЯ ФУНКЦИЯ - Получение координат по клику
