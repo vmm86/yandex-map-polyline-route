@@ -122,15 +122,21 @@ function init() {
         }
     });
 
+    // Переменные для хранения длины и стоимости маршрута
+    var routeLength = 0;
+    var routePrice  = 0;
+
     // Построение маршрута
     function createRoute() {
         // Получение длины построенного маршрута
-        window.routeLength = Math.ceil(polyline.geometry.getDistance() / 1000);
+        routeLength = Math.ceil(polyline.geometry.getDistance() / 1000);
         // Получение стоимости маршрута
-        window.routePrice = (routeLength * document.getElementById('routePrice').value).toFixed(2);
+        routePrice = (routeLength * document.getElementById('routePrice').value).toFixed(2);
+        // Если цена целая - преобразуется в integer, иначе - в float
+        routePrice = routePrice % 1 === 0 ? parseInt(routePrice) : parseFloat(routePrice);
     }
+    // Вывод полученной длины и стоимости маршрута
     function outputRoute() {
-        // Вывод полученной длины и стоимости маршрута
         document.getElementById('routeInfo').innerHTML = 'Длина: <strong>' + routeLength + '</strong> км <br> Стоимость: <strong>' + routePrice + '</strong> руб.';
     }
 
@@ -160,6 +166,9 @@ function init() {
         });
         // Удаление построенного ранее маршрута
         polyline.geometry.splice(0, polyline.geometry.getLength());
+        // Сброс переменных routeLength и routePrice
+        routeLength = 0;
+        routePrice  = 0;
         // Очистка списка routePoints
         var routePoints = document.getElementById('routePoints');
         routePoints.innerHTML = '';
@@ -169,7 +178,6 @@ function init() {
         // Сброс флажка "маршрут туда и обратно"
         document.getElementById('routeThereAndBack').checked = false;
     }
-
     // СЛУЖЕБНАЯ ФУНКЦИЯ - Получение координат по клику
     // myMap.events.add('click', function (e) {
     //     var coords = e.get('coords');
