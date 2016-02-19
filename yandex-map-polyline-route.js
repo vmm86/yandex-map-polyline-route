@@ -171,12 +171,12 @@ function init() {
     }
 
     // СЛУЖЕБНАЯ ФУНКЦИЯ - Получение координат по клику
-    myMap.events.add('click', function (e) {
-        var coords = e.get('coords');
-        coords[0] = +coords[0].toFixed(4);
-        coords[1] = +coords[1].toFixed(4);
-        alert(coords);
-        console.log(coords);
-    });
+    // myMap.events.add('click', function (e) {
+    //     var coords = e.get('coords');
+    //     coords[0] = +coords[0].toFixed(4);
+    //     coords[1] = +coords[1].toFixed(4);
+    //     alert(coords);
+    //     console.log(coords);
+    // });
 
 }
