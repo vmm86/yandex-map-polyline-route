@@ -134,18 +134,19 @@ function init() {
         document.getElementById('routeInfo').innerHTML = 'Длина: <strong>' + routeLength + '</strong> км <br> Стоимость: <strong>' + routePrice + '</strong> руб.';
     }
 
-
     document.getElementById('routeThereAndBack').onclick = function(e) {
         // Маршрут туда и обратно удваивается
-        if (this.checked) {
-            routeLength *= 2;
-            routePrice  *= 2;
-            outputRoute();
-        } else {
-            routeLength /= 2;
-            routePrice  /= 2;
-            outputRoute();
-        }
+        if (typeof routeLength !== 'undefined' && typeof routePrice !== 'undefined') {
+            if (this.checked) {
+                routeLength *= 2;
+                routePrice  *= 2;
+                outputRoute();
+            } else {
+                routeLength /= 2;
+                routePrice  /= 2;
+                outputRoute();
+            }
+        } else {console.log('nothing to work with')}
     }
 
     // Очистка маршрута
