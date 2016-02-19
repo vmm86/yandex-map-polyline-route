@@ -140,19 +140,20 @@ function init() {
         document.getElementById('routeInfo').innerHTML = 'Длина: <strong>' + routeLength + '</strong> км <br> Стоимость: <strong>' + routePrice + '</strong> руб.';
     }
 
+    // Маршрут туда и обратно удваивается, если он уже был постороен
     document.getElementById('routeThereAndBack').onclick = function(e) {
-        // Маршрут туда и обратно удваивается
-        if (typeof routeLength !== 'undefined' && typeof routePrice !== 'undefined') {
+        if (routeLength !== 0 && routePrice !== 0) {
             if (this.checked) {
                 routeLength *= 2;
                 routePrice  *= 2;
-                outputRoute();
             } else {
                 routeLength /= 2;
                 routePrice  /= 2;
-                outputRoute();
             }
-        } else {console.log('nothing to work with')}
+            // Если цена целая - преобразуется в integer, иначе - в float
+            routePrice = routePrice % 1 === 0 ? parseInt(routePrice) : parseFloat(routePrice);
+            outputRoute();
+        }
     }
 
     // Очистка маршрута
@@ -187,4 +188,9 @@ function init() {
     //     console.log(coords);
     // });
 
+}
+
+// Сброс флажка "маршрут туда и обратно" при перезагрузке страницы
+window.onload = function() {
+    document.getElementById('routeThereAndBack').checked = false;
 }
