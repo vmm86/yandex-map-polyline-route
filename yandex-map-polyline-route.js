@@ -100,6 +100,11 @@ function init() {
                         //// Маршрут не будет выведен, если ни одна точка ещё не выбрана или выбрана только одна точка
                         if (polyline.geometry.getLength() >= 2 ) {
                             outputRoute();
+                            // Если маршрут ещё не построен - кнопка "Очистить маршрут" не показывается
+                            document.getElementById('clearRoute').style.display = 'block';
+                        } else {
+                            // Если маршрут ещё не построен - кнопка "Очистить маршрут" не показывается
+                            document.getElementById('clearRoute').style.display = 'none';
                         }
                     }
                 }
@@ -124,8 +129,12 @@ function init() {
                         //// Маршрут не будет выведен, если ни одна точка ещё не выбрана или выбрана только одна точка
                         if (polyline.geometry.getLength() >= 2 ) {
                             outputRoute();
+                            // Если маршрут ещё не построен - кнопка "Очистить маршрут" не показывается
+                            document.getElementById('clearRoute').style.display = 'block';
                         } else {
                             clearRoute();
+                            // Если маршрут ещё не построен - кнопка "Очистить маршрут" не показывается
+                            document.getElementById('clearRoute').style.display = 'none';
                         }
                     }
                 }
@@ -163,6 +172,11 @@ function init() {
                         //// Маршрут не будет выведен, если ни одна точка ещё не выбрана или выбрана только одна точка
                         if (polyline.geometry.getLength() >= 2 ) {
                             outputRoute();
+                            // Если маршрут ещё не построен - кнопка "Очистить маршрут" не показывается
+                            document.getElementById('clearRoute').style.display = 'block';
+                        } else {
+                            // Если маршрут ещё не построен - кнопка "Очистить маршрут" не показывается
+                            document.getElementById('clearRoute').style.display = 'none';
                         }
                     }
                 }
@@ -186,8 +200,12 @@ function init() {
                         //// Маршрут будет очищен, если выбранной остаются менее 2-х точек
                         if (polyline.geometry.getLength() >= 2 ) {
                             outputRoute();
+                            // Если маршрут ещё не построен - кнопка "Очистить маршрут" не показывается
+                            document.getElementById('clearRoute').style.display = 'block';
                         } else {
                             clearRoute();
+                            // Если маршрут ещё не построен - кнопка "Очистить маршрут" не показывается
+                            document.getElementById('clearRoute').style.display = 'none';
                         }
                     }
                 }
@@ -252,6 +270,7 @@ function init() {
         routeInfo.innerHTML = 'Маршрут ещё не построен...';
         // Сброс флажка "маршрут туда и обратно"
         document.getElementById('routeThereAndBack').checked = false;
+        document.getElementById('clearRoute').style.display = 'none';
     }
 
     document.getElementById('clearRoute').onclick = clearRoute;
@@ -270,4 +289,5 @@ function init() {
 // Сброс флажка "маршрут туда и обратно" при перезагрузке страницы
 window.onload = function() {
     document.getElementById('routeThereAndBack').checked = false;
+    document.getElementById('clearRoute').style.display = 'none';
 }
