@@ -39,87 +39,161 @@ function init() {
     // Добавление будущего маршрута на карту
     myMap.geoObjects.add(polyline);
 
-    // Создание пустой коллекции транзитных точек
+    // Создание коллекции транзитных точек
+    //// Оформление обычной и выделенной транзитных точек
+    var midPointsUnchecked = 'islands#darkGreenCircleIcon';
+    var midPointsChecked   = 'islands#darkGreenCircleDotIcon';
+    //// Заготовка пустой коллекции транзитных точек
     var routeMidPointsCollection = new ymaps.GeoObjectCollection(null, {
-        preset: 'islands#darkGreenCircleIcon',
+        preset: midPointsUnchecked,
         draggable: false
     });
-    // Добавление транзитных точек в коллекцию
+    //// Добавление транзитных точек в коллекцию
     for (item in routeMidPoints) {
         routeMidPointsCollection.add( new ymaps.Placemark(routeMidPoints[item], { hintContent: item } ) );
     }
-    // Добавление коллекции транзитных точек на карту
+    //// Добавление коллекции транзитных точек на карту
     myMap.geoObjects.add(routeMidPointsCollection);
 
     // Создание пустой коллекции конечных точек
+    //// Оформление обычной и выделенной конечных точек
+    var endPointsUnchecked = 'islands#redCircleIcon';
+    var endPointsChecked   = 'islands#redCircleDotIcon';
+    //// Заготовка пустой коллекции конечных точек
     var routeEndPointsCollection = new ymaps.GeoObjectCollection(null, {
-        preset: 'islands#redCircleIcon',
+        preset: endPointsUnchecked,
         draggable: false
     });
-    // Добавление конечных точек в коллекцию
+    //// Добавление конечных точек в коллекцию
     for (item in routeEndPoints) {
         routeEndPointsCollection.add( new ymaps.Placemark(routeEndPoints[item], { hintContent: item } ) );
     }
-    // Добавление коллекции конечных точек на карту
+    //// Добавление коллекции конечных точек на карту
     myMap.geoObjects.add(routeEndPointsCollection);
 
     // Работа с транзитными точками при создании маршрута
     routeMidPointsCollection.events.add('click', function (e) {
-        e.get('target').options.set('preset', 'islands#darkGreenCircleDotIcon');
 
+        // Оформление кликнутой транзитной точки
+        var currentPoint = e.get('target').options.get('preset');
         // Кординаты кликнутой транзитной точки
-        var newPointCoords = e.get('target').geometry._coordinates;
-        // console.log(newPointCoords);
+        var currentPointCoords = e.get('target').geometry._coordinates;
+        // Список routePoints
+        var routePoints     = document.getElementById('routePoints');
+        var routeChildPoint = document.createElement('li');
 
-        var routePoints   = document.getElementById('routePoints');
-        var newChildPoint = document.createElement('li');
+        // Если точка была выделена при клике
+        if (typeof currentPoint == 'undefined' || currentPoint == midPointsUnchecked) {
+            // Смена оформления точки на выделенную
+            e.get('target').options.set('preset', midPointsChecked);
 
-        // Добавление координат кликнутой транзитной точки в полилинию, а её подписи - в список routePoints
-        //// Точка не будет дублироваться в маршруте, если она совпадает с предыдущей
-        if ( polyline.geometry.get(polyline.geometry.getLength() - 1) !== newPointCoords) {
-            for (item in routeMidPoints) {
-                if ( newPointCoords == routeMidPoints[item] ) {
-                    polyline.geometry.insert(polyline.geometry.getLength(), newPointCoords);
-                    // Добавление названия кликнутой транзитной точки в список routePoints
-                    newChildPoint.innerHTML = item;
-                    routePoints.appendChild(newChildPoint);
-                    createRoute();
-                    //// Маршрут не будет выведен, если ни одна точка ещё не выбрана или выбрана только одна точка
-                    if (polyline.geometry.getLength() >= 2 ) {
-                        outputRoute();
+            // Добавление координат кликнутой транзитной точки в полилинию, а её подписи - в список routePoints
+            //// Точка не будет дублироваться в маршруте, если она совпадает с предыдущей
+            if (polyline.geometry.get(polyline.geometry.getLength() - 1) !== currentPointCoords) {
+                for (item in routeMidPoints) {
+                    if ( currentPointCoords == routeMidPoints[item] ) {
+                        polyline.geometry.insert(polyline.geometry.getLength(), currentPointCoords);
+                        // Добавление названия кликнутой транзитной точки в список routePoints
+                        routeChildPoint.innerHTML = item;
+                        routePoints.appendChild(routeChildPoint);
+                        createRoute();
+                        //// Маршрут не будет выведен, если ни одна точка ещё не выбрана или выбрана только одна точка
+                        if (polyline.geometry.getLength() >= 2 ) {
+                            outputRoute();
+                        }
+                    }
+                }
+            }
+        // Если у точки снято выделение при повторном клике
+        } else {
+            // Если кликнута именно последняя точка полилинии
+            if (polyline.geometry.get(polyline.geometry.getLength() - 1) === currentPointCoords) {
+
+                e.get('target').options.set('preset', midPointsUnchecked);
+
+                // Удаление координат кликнутой транзитной точки из полилинии, а её подписи - из списка routePoints
+                for (item in routeMidPoints) {
+                    if ( currentPointCoords == routeMidPoints[item] ) {
+                        // Сброс флажка "маршрут туда и обратно"
+                        document.getElementById('routeThereAndBack').checked = false;
+                        // Удаление кликнутой транзитной точки из полилинии
+                        polyline.geometry.remove( polyline.geometry.getLength() - 1 );
+                        // Удаление названия кликнутой транзитной точки из списка routePoints
+                        routePoints.removeChild(routePoints.lastChild);
+                        createRoute();
+                        //// Маршрут не будет выведен, если ни одна точка ещё не выбрана или выбрана только одна точка
+                        if (polyline.geometry.getLength() >= 2 ) {
+                            outputRoute();
+                        } else {
+                            clearRoute();
+                        }
                     }
                 }
             }
         }
+
     });
 
     // Работа с конечными точками при создании маршрута
     routeEndPointsCollection.events.add('click', function (e) {
-        e.get('target').options.set('preset', 'islands#redCircleDotIcon');
 
-        // Кординаты кликнутой транзитной точки
-        var newPointCoords = e.get('target').geometry._coordinates;
+        // Оформление кликнутой конечной точки
+        var currentPoint = e.get('target').options.get('preset');
+        // Кординаты кликнутой конечной точки
+        var currentPointCoords = e.get('target').geometry._coordinates;
+        // Список routePoints
+        var routePoints     = document.getElementById('routePoints');
+        var routeChildPoint = document.createElement('li');
 
-        var routePoints   = document.getElementById('routePoints');
-        var newChildPoint = document.createElement('li');
+        // Если точка была выделена при клике
+        if (typeof currentPoint == 'undefined' || currentPoint == endPointsUnchecked) {
+            // Смена оформления точки на обычную
+            e.get('target').options.set('preset', endPointsChecked);
 
-        // Добавление координат кликнутой транзитной точки в полилинию, а её подписи - в список routePoints
-        //// Точка не будет дублироваться в маршруте, если она совпадает с предыдущей
-        if ( polyline.geometry.get(polyline.geometry.getLength() - 1) !== newPointCoords) {
-            for (item in routeEndPoints) {
-                if ( newPointCoords == routeEndPoints[item] ) {
-                    polyline.geometry.insert(polyline.geometry.getLength(), newPointCoords);
-                    // Добавление названия кликнутой транзитной точки в список routePoints
-                    newChildPoint.innerHTML = item;
-                    routePoints.appendChild(newChildPoint);
-                    createRoute();
-                    //// Маршрут не будет выведен, если ни одна точка ещё не выбрана или выбрана только одна точка
-                    if (polyline.geometry.getLength() >= 2 ) {
-                        outputRoute();
+            // Добавление координат кликнутой конечной точки в полилинию, а её подписи - в список routePoints
+            //// Точка не будет дублироваться в маршруте, если она совпадает с предыдущей
+            if ( polyline.geometry.get(polyline.geometry.getLength() - 1) !== currentPointCoords) {
+                for (item in routeEndPoints) {
+                    if ( currentPointCoords == routeEndPoints[item] ) {
+                        polyline.geometry.insert(polyline.geometry.getLength(), currentPointCoords);
+                        // Добавление названия кликнутой конечной точки в список routePoints
+                        routeChildPoint.innerHTML = item;
+                        routePoints.appendChild(routeChildPoint);
+                        createRoute();
+                        //// Маршрут не будет выведен, если ни одна точка ещё не выбрана или выбрана только одна точка
+                        if (polyline.geometry.getLength() >= 2 ) {
+                            outputRoute();
+                        }
+                    }
+                }
+            }
+        // Если у точки снято выделение при повторном клике
+        } else {
+            // Если кликнута именно последняя точка полилинии
+            if (polyline.geometry.get(polyline.geometry.getLength() - 1) === currentPointCoords) {
+                e.get('target').options.set('preset', endPointsUnchecked);
+
+                // Удаление координат кликнутой конечной точки из полилинии, а её подписи - из списка routePoints
+                for (item in routeEndPoints) {
+                    if ( currentPointCoords == routeEndPoints[item] ) {
+                        // Сброс флажка "маршрут туда и обратно"
+                        document.getElementById('routeThereAndBack').checked = false;
+                        // Удаление кликнутой конечной точки из полилинии
+                        polyline.geometry.remove( polyline.geometry.getLength() - 1 );
+                        // Удаление названия кликнутой конечной точки из списка routePoints
+                        routePoints.removeChild(routePoints.lastChild);
+                        createRoute();
+                        //// Маршрут будет очищен, если выбранной остаются менее 2-х точек
+                        if (polyline.geometry.getLength() >= 2 ) {
+                            outputRoute();
+                        } else {
+                            clearRoute();
+                        }
                     }
                 }
             }
         }
+
     });
 
     // Переменные для хранения длины и стоимости маршрута
@@ -157,7 +231,7 @@ function init() {
     }
 
     // Очистка маршрута
-    document.getElementById('clearRoute').onclick = function () {
+    function clearRoute() {
         // Сброс стилизации всех точек
         routeMidPointsCollection.each(function(i, e) {
             i.options.set('preset', 'islands#darkGreenCircleIcon');
@@ -179,6 +253,9 @@ function init() {
         // Сброс флажка "маршрут туда и обратно"
         document.getElementById('routeThereAndBack').checked = false;
     }
+
+    document.getElementById('clearRoute').onclick = clearRoute;
+
     // СЛУЖЕБНАЯ ФУНКЦИЯ - Получение координат по клику
     // myMap.events.add('click', function (e) {
     //     var coords = e.get('coords');
