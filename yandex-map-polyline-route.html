@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="author" content="Visilyev Michail (vmm)">
+    <meta name="author" content="Visilyev Michail (vmm86)">
     <title>Маршруты выездов по области</title>
     <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="yandex-map-polyline-route.css">
@@ -19,13 +19,13 @@
         <p>Создавайте маршрут, нажимая на точки, через которые осуществлялся проезд.</p>
         <p>Если маршрут в обе стороны проходил по одним и тем же точкам, выделите маршрут в одну сторону и нажмите флажок "маршрут туда и обратно".</p>
         <p>При повторном нажатии на последнюю точку она удаляется из маршрута.</p>
-        <label for="routePrice">Стоимость километра: <input id="routePrice" type="number" value="5.4" disabled> руб.</label>
+        <label for="routeRatio">Стоимость километра: <input id="routeRatio" type="number" value="" disabled> руб.</label>
         <br>
         <p>Точки маршрута:
             <ul id="routePoints">
             </ul>
         </p>
-        <p><label for="routeThereAndBack"><input id="routeThereAndBack" type="checkbox"> маршрут туда и обратно</label></p>
+        <p><label for="routeThereAndBack"><input id="routeThereAndBack" type="checkbox" disabled> маршрут туда и обратно</label></p>
         <div id="routeInfo">Маршрут ещё не построен...</div>
         <br>
         <button id="clearRoute">Очистить маршрут</button>
@@ -35,7 +35,7 @@
 
 <script src="//api-maps.yandex.ru/2.1/?lang=ru-RU"></script>
 <script src="http://api-maps.yandex.ru/2.1/?lang=ru-RU"></script>
-<script src="yandex-map-polyline-route-coordinates.js"></script>
+<script src="yandex-map-polyline-route-data.js"></script>
 <script src="yandex-map-polyline-route.js"></script>
 
 </body>

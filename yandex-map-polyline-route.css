@@ -30,13 +30,14 @@ h3 {
     list-style-type: circle;
     padding-left: 1.5rem;
 }
-#routePrice {
+#routeRatio {
     width: 3rem;
 }
 #routeThereAndBack {
     vertical-align: middle;
 }
 #clearRoute {
+    display: none;
     border: none;
     border-radius: 0.2rem;
     box-shadow: -1px -1px 0 #961C1C inset;
